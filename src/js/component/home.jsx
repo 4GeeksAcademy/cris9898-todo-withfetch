@@ -1,26 +1,58 @@
-import React from "react";
+import React, { useContext, useState} from "react";
+import { Context } from "./appContext";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
 
-//create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+    const { store, actions } = useContext(Context);
+    const [newTodo, setNewTodo] = useState("");
+
+
+    const handleInputChange = (e) => {
+        setNewTodo(e.target.value);
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter" && newTodo.trim() !== "") {
+            actions.addTodos(newTodo);
+            setNewTodo(""); // Clear input after adding
+        }
+    };
+
+    const handleDelete = (id) => {
+        actions.deleteTodo(id);
+    };
+    
+    
+    return (
+        <div className="text-center">
+            <div className="container">
+                <h1>To do List:</h1>
+                <div className="d-flex  justify-content-center gap-3">
+                    <label>Write your to do:</label>
+                    <input
+                        type="text"
+                        placeholder="Add your to Do's..."
+                        value={newTodo}
+                        onChange={handleInputChange}
+                        onKeyDown={handleKeyPress}
+                    />
+                </div>
+                <div className="border-top mt-2"></div>
+                <div className="border-top card mt-2">
+                    {store.todos.map((todo) => {
+                        return (
+                            <div key={todo.id} className="d-flex justify-content-evenly align-items-center m-1">
+                                <div>{todo.label}</div>
+                                <button className="btn btn-danger" onClick={() => handleDelete(todo.id)}>
+                                    <i className="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default Home;
