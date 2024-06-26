@@ -14,7 +14,7 @@ const Home = () => {
     const handleKeyPress = (e) => {
         if (e.key === "Enter" && newTodo.trim() !== "") {
             actions.addTodos(newTodo);
-            setNewTodo(""); // Clear input after adding
+            setNewTodo(""); 
         }
     };
 
